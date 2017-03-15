@@ -24,6 +24,7 @@ public abstract class Sort{
     public abstract float[] handle();
 
     public String checkIfSorted(){
+        System.out.println(Arrays.toString(listToBeSorted));
         for (int i=0; i<listToBeSorted.length-1; i++){
 
             if (listToBeSorted[i] > (listToBeSorted[i+1])){
