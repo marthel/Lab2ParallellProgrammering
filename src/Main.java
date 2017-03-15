@@ -6,6 +6,7 @@ import QuickMulti.MultiPivotQuickStrategy;
 import QuickSingle.SinglePivotQuickStrategy;
 import MergeSingle.OutOfplaceMergeSingleStrategy;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -15,22 +16,48 @@ import java.util.Random;
 public class Main {
 
 
+
+    private static int SIZE = 100000000;
+
+
     public static void main(String[] args) throws InterruptedException {
+
+
+
+        ArrayList<TimeMeasurer> tm = CreateStrategies();
+
+        for (TimeMeasurer t:tm ) {
+            t.run();
+        }
+
+    }
+
+
+    private static ArrayList<TimeMeasurer> CreateStrategies(){
+        ArrayList<TimeMeasurer> tm = new ArrayList<>();
+        for(int i=0; i<20; i++) {
+            tm.add(new TimeMeasurer(new ArraySortStrategy(randomGenerator())));
+            tm.add(new TimeMeasurer(new ArrayParallelSortStrategy(randomGenerator())));
+            tm.add(new TimeMeasurer(new OutOfplaceMergeSingleStrategy(randomGenerator())));
+            tm.add(new TimeMeasurer(new SinglePivotQuickStrategy(randomGenerator())));
+        }
+
+        for (int j=2; j<5; j++) {
+            for (int i = 1; i < 20; i++) {
+                tm.add(new TimeMeasurer(new OutOfPlaceMergeMultiThreadStrategy(randomGenerator(), j)));
+                tm.add(new TimeMeasurer(new MultiPivotQuickStrategy(randomGenerator(), j)));
+            }
+        }
+
+        return tm;
+    }
+
+    private static float[] randomGenerator(){
         Random r = new Random(System.currentTimeMillis());
         float[] unsortedArray = new float[100000000];
         for (int i=0; i<unsortedArray.length; i++) unsortedArray[i] = r.nextFloat()*4;
 
-
-
-//        new TimeMeasurer(new ArraySortStrategy(Arrays.copyOf(unsortedArray, unsortedArray.length))).run();
-//
-//        new TimeMeasurer(new SinglePivotQuickStrategy(Arrays.copyOf(unsortedArray, unsortedArray.length))).run();
-//        new TimeMeasurer(new OutOfplaceMergeSingleStrategy(Arrays.copyOf(unsortedArray, unsortedArray.length))).run();
-//        new TimeMeasurer(new InPlaceMergeSingleStrategy(Arrays.copyOf(unsortedArray, unsortedArray.length))).run();
-//
-        new TimeMeasurer(new MultiPivotQuickStrategy(Arrays.copyOf(unsortedArray, unsortedArray.length),4)).run();
-//        new TimeMeasurer(new OutOfPlaceMergeMultiThreadStrategy(Arrays.copyOf(unsortedArray, unsortedArray.length),8)).run();
-        new TimeMeasurer(new ArrayParallelSortStrategy(Arrays.copyOf(unsortedArray, unsortedArray.length))).run();
+        return unsortedArray;
     }
 
 }
