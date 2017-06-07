@@ -10,20 +10,21 @@ public class OutOfPlaceMergeMulti extends RecursiveTask<float[]>{
 
 
     private float[] listToBeSorted;
-    private static int Threshold = 100000;
+    private int Threshold = 0;
 
-    public OutOfPlaceMergeMulti(float[] listToBeSorted) {
+    public OutOfPlaceMergeMulti(float[] listToBeSorted, int threshold) {
         this.listToBeSorted = listToBeSorted;
+        this.Threshold = threshold;
     }
 
     @Override
     protected float[] compute() {
 
-        if (listToBeSorted.length < Threshold){
+        if (listToBeSorted.length <= Threshold){
            return mergeSort(listToBeSorted);
         }else {
-            OutOfPlaceMergeMulti left = new OutOfPlaceMergeMulti(Arrays.copyOf(listToBeSorted,listToBeSorted.length/2));
-            OutOfPlaceMergeMulti right = new OutOfPlaceMergeMulti(Arrays.copyOfRange(listToBeSorted,listToBeSorted.length/2,listToBeSorted.length));
+            OutOfPlaceMergeMulti left = new OutOfPlaceMergeMulti(Arrays.copyOf(listToBeSorted,listToBeSorted.length/2),Threshold);
+            OutOfPlaceMergeMulti right = new OutOfPlaceMergeMulti(Arrays.copyOfRange(listToBeSorted,listToBeSorted.length/2,listToBeSorted.length),Threshold);
             left.fork();
             right.compute();
             left.join();
@@ -34,7 +35,7 @@ public class OutOfPlaceMergeMulti extends RecursiveTask<float[]>{
 
     public float[] mergeSort(float[] unSortedArr){
 
-        if (unSortedArr.length == 1)
+        if (unSortedArr.length <= 1)
             return unSortedArr;
 
         float[] left = Arrays.copyOf(unSortedArr,(unSortedArr.length / 2));

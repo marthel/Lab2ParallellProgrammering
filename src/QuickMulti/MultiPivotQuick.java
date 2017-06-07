@@ -1,5 +1,6 @@
 package QuickMulti;
 
+import java.util.Arrays;
 import java.util.concurrent.RecursiveTask;
 
 /**
@@ -9,7 +10,7 @@ public class MultiPivotQuick extends RecursiveTask<float[]> {
 
 
     private float[] listToBeSorted;
-    private static int Threshold = 100000;
+    private static final int Threshold = 10000;
     private int lo,hi;
 
     public MultiPivotQuick(float[] listToBeSorted,int lo,int hi) {
@@ -21,12 +22,9 @@ public class MultiPivotQuick extends RecursiveTask<float[]> {
     @Override
     protected float[] compute() {
 
-        if (listToBeSorted.length < Threshold){
+        if ((hi-lo) <= Threshold){
             quickSort(listToBeSorted, lo, hi);
         }else {
-
-            if ((hi-lo) <= 1)
-                return null;
             int i = lo;
             float pivot = listToBeSorted[hi-1];
 

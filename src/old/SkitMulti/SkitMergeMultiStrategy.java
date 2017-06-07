@@ -1,4 +1,4 @@
-package SkitMulti;
+package old.SkitMulti;
 
 import Stratagy.Sort;
 
@@ -15,7 +15,7 @@ public class SkitMergeMultiStrategy extends Sort {
     @Override
     public float[] handle() {
 
-        super.getPool().invoke(new SkitMergeSortMulti(super.getListToBeSorted(), 0, super.getListToBeSorted().length - 1));
+        super.getPool().invoke(new SkitMergeSortMulti(super.getListToBeSorted(), 0, super.getListToBeSorted().length - 1,new float[getListToBeSorted().length]));
         return null;
     }
 

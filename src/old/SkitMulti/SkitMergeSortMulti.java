@@ -1,4 +1,4 @@
-package SkitMulti;
+package old.SkitMulti;
 
 import java.util.concurrent.RecursiveTask;
 
@@ -13,30 +13,24 @@ public class SkitMergeSortMulti extends RecursiveTask<float[]> {
     private static int Threshold = 1000000;
 
 
-    public SkitMergeSortMulti(float[] values, int low, int high) {
+    public SkitMergeSortMulti(float[] values, int low, int high,float[] mergeArray) {
         this.arrayToBeSorted = values;
         this.low = low;
         this.high = high;
-        this.mergeArray = new float[arrayToBeSorted.length];
+        this.mergeArray = mergeArray;
     }
 
     @Override
     protected float[] compute() {
-        if (arrayToBeSorted.length < Threshold){
+        if (low >= high) {
             return mergeSort(low, high);
         }else {
-            if (low >= high)
-                return arrayToBeSorted;
             int middle = low + (high - low) / 2;
-
-            SkitMergeSortMulti left = new SkitMergeSortMulti(arrayToBeSorted, low, middle);
-            SkitMergeSortMulti right = new SkitMergeSortMulti(arrayToBeSorted, middle+1, high);
-
+            SkitMergeSortMulti left = new SkitMergeSortMulti(arrayToBeSorted, low, middle, mergeArray);
+            SkitMergeSortMulti right = new SkitMergeSortMulti(arrayToBeSorted, middle+1, high, mergeArray);
             left.fork();
             right.compute();
             left.join();
-
-            copyArray();
 
             return merge(low, middle, high);
         }
@@ -48,13 +42,12 @@ public class SkitMergeSortMulti extends RecursiveTask<float[]> {
         int middle = low + (high - low) / 2;
         mergeSort(low, middle);
         mergeSort(middle+1, high);
-        copyArray();
         return merge(low, middle, high);
     }
 
     private float[] merge(int low, int middle, int high) {
+        copyArray();
         int i = low, j = middle + 1, k = low;
-
         while (i <= middle && j <= high)
             arrayToBeSorted[k++] = mergeArray[i] <= mergeArray[j] ? mergeArray[i++] : mergeArray[j++];
         while (i <= middle)

@@ -19,6 +19,9 @@ public class TimeMeasurer {
 
         System.gc();
         Thread.sleep(1000);
+        sort.warmUp();
+        System.gc();
+        Thread.sleep(1000);
 
         long start = System.nanoTime();
         sort.handle();

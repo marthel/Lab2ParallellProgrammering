@@ -20,11 +20,14 @@ public abstract class Sort{
     public Sort(float[] listToBeSorted) {
         this.listToBeSorted = listToBeSorted;
     }
-
+    public void warmUp(){
+        float[] tmp = Arrays.copyOf(listToBeSorted,listToBeSorted.length);
+        handle();
+        listToBeSorted = tmp;
+    }
     public abstract float[] handle();
 
     public String checkIfSorted(){
-        System.out.println(Arrays.toString(listToBeSorted));
         for (int i=0; i<listToBeSorted.length-1; i++){
 
             if (listToBeSorted[i] > (listToBeSorted[i+1])){

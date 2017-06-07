@@ -1,7 +1,5 @@
 package MergeMulti;
 
-import MergeSingle.OutOfPlaceMergeSingle;
-import QuickMulti.MultiPivotQuick;
 import Stratagy.Sort;
 
 /**
@@ -9,15 +7,16 @@ import Stratagy.Sort;
  */
 public class OutOfPlaceMergeMultiThreadStrategy extends Sort {
 
-
-    public OutOfPlaceMergeMultiThreadStrategy(float[] listToBeSorted, int poolSize) {
+    int threshold;
+    public OutOfPlaceMergeMultiThreadStrategy(float[] listToBeSorted, int poolSize, int threshold) {
         super(listToBeSorted, poolSize);
+        this.threshold = threshold;
     }
 
     @Override
     public float[] handle() {
 
-        super.getPool().invoke(new OutOfPlaceMergeMulti(super.getListToBeSorted()));
+        super.getPool().invoke(new OutOfPlaceMergeMulti(super.getListToBeSorted(),threshold));
 
         return null;
     }
